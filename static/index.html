@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>صيّاد الأسعار 🎯 — قارن أسعار المنتجات في مصر</title>
+<style>
+  :root {
+    --bg: #0f1420;
+    --card: #1a2233;
+    --card2: #222d44;
+    --text: #eef2f8;
+    --muted: #93a0b8;
+    --accent: #4f8cff;
+    --green: #2ecc71;
+    --orange: #f68b1e;
+    --yellow: #feee00;
+    --amazon: #ff9900;
+    --red: #e74c3c;
+    --border: #2c3a56;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+  .hero {
+    text-align: center;
+    padding: 56px 20px 30px;
+    background: radial-gradient(ellipse at top, #1c2a4a 0%, var(--bg) 65%);
+  }
+  .hero h1 { font-size: 2.4rem; margin-bottom: 8px; }
+  .hero h1 span { color: var(--accent); }
+  .hero p { color: var(--muted); font-size: 1.05rem; }
+  .stores-line { margin-top: 14px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .store-pill {
+    padding: 5px 16px; border-radius: 999px; font-size: .85rem; font-weight: bold;
+    border: 1px solid var(--border); background: var(--card);
+  }
+  .pill-jumia { color: var(--orange); }
+  .pill-noon { color: var(--yellow); }
+  .pill-amazon { color: var(--amazon); }
+
+  .search-box {
+    max-width: 640px; margin: 26px auto 0; display: flex; gap: 10px;
+    background: var(--card); border: 2px solid var(--border); border-radius: 16px; padding: 8px;
+    transition: border-color .2s;
+  }
+  .search-box:focus-within { border-color: var(--accent); }
+  .search-box input {
+    flex: 1; background: transparent; border: none; outline: none;
+    color: var(--text); font-size: 1.1rem; padding: 10px 14px; font-family: inherit;
+  }
+  .search-box button {
+    background: var(--accent); color: #fff; border: none; border-radius: 12px;
+    padding: 12px 28px; font-size: 1.05rem; font-weight: bold; cursor: pointer; font-family: inherit;
+    transition: background .2s, transform .1s;
+  }
+  .search-box button:hover { background: #3d78e8; }
+  .search-box button:active { transform: scale(.97); }
+  .search-box button:disabled { opacity: .6; cursor: wait; }
+
+  .container { max-width: 1080px; margin: 0 auto; padding: 24px 18px 60px; }
+
+  .banner {
+    border-radius: 12px; padding: 12px 18px; margin-bottom: 18px; font-size: .92rem;
+    border: 1px solid;
+  }
+  .banner-demo { background: #2a2410; border-color: #6b5a1e; color: #ffd866; }
+  .banner-live { background: #0f2a1a; border-color: #1e6b3a; color: #7be3a8; }
+
+  .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 22px; }
+  .stat {
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    padding: 16px 18px; text-align: center;
+  }
+  .stat .label { color: var(--muted); font-size: .85rem; margin-bottom: 6px; }
+  .stat .value { font-size: 1.5rem; font-weight: 800; }
+  .stat.best { border-color: var(--green); background: linear-gradient(180deg, #14291d, var(--card)); }
+  .stat.best .value { color: var(--green); }
+
+  .store-status { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 7px; padding: 6px 14px; border-radius: 999px;
+    background: var(--card); border: 1px solid var(--border); font-size: .85rem; cursor: pointer;
+    transition: all .15s; user-select: none;
+  }
+  .chip:hover { border-color: var(--accent); }
+  .chip.active { border-color: var(--accent); background: #16233f; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; }
+  .dot-ok { background: var(--green); }
+  .dot-blocked { background: var(--red); }
+  .dot-empty { background: #888; }
+  .dot-error { background: #e67e22; }
+
+  table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 14px; overflow: hidden; }
+  thead th {
+    background: var(--card2); padding: 13px 14px; font-size: .88rem; color: var(--muted);
+    text-align: right; cursor: pointer; white-space: nowrap; user-select: none;
+  }
+  thead th:hover { color: var(--text); }
+  tbody td { padding: 13px 14px; border-top: 1px solid var(--border); font-size: .93rem; vertical-align: middle; }
+  tbody tr:hover { background: #1f2a42; }
+  tbody tr.best-row { background: rgba(46, 204, 113, .07); }
+  .prod-title { max-width: 380px; }
+  .prod-title a { color: var(--text); text-decoration: none; }
+  .prod-title a:hover { color: var(--accent); text-decoration: underline; }
+  .badge {
+    display: inline-block; padding: 3px 12px; border-radius: 999px; font-size: .8rem; font-weight: bold;
+  }
+  .badge-jumia { background: rgba(246,139,30,.15); color: var(--orange); }
+  .badge-noon { background: rgba(254,238,0,.12); color: var(--yellow); }
+  .badge-amazon { background: rgba(255,153,0,.15); color: var(--amazon); }
+  .price { font-weight: 800; font-size: 1.05rem; white-space: nowrap; }
+  .price-best { color: var(--green); }
+  .old-price { color: var(--muted); text-decoration: line-through; font-size: .82rem; display: block; }
+  .disc { background: rgba(231,76,60,.15); color: #ff8a7a; padding: 2px 10px; border-radius: 999px; font-size: .8rem; font-weight: bold; white-space: nowrap; }
+  .best-tag { color: var(--green); font-size: .78rem; font-weight: bold; }
+
+  .actions { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+  .btn {
+    background: var(--card2); color: var(--text); border: 1px solid var(--border); border-radius: 10px;
+    padding: 9px 18px; cursor: pointer; font-family: inherit; font-size: .9rem; transition: all .15s;
+  }
+  .btn:hover { border-color: var(--accent); }
+
+  .empty { text-align: center; padding: 50px 20px; color: var(--muted); }
+  .empty .big { font-size: 3rem; margin-bottom: 12px; }
+  .suggestions { margin-top: 18px; display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .sug {
+    background: var(--card); border: 1px solid var(--border); color: var(--text);
+    padding: 7px 15px; border-radius: 999px; cursor: pointer; font-size: .85rem; font-family: inherit;
+  }
+  .sug:hover { border-color: var(--accent); color: var(--accent); }
+
+  .loader { text-align: center; padding: 60px 0; }
+  .spinner {
+    width: 46px; height: 46px; border: 4px solid var(--border); border-top-color: var(--accent);
+    border-radius: 50%; margin: 0 auto 16px; animation: spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loader p { color: var(--muted); }
+
+  .footer { text-align: center; color: var(--muted); font-size: .8rem; padding: 24px; border-top: 1px solid var(--border); }
+
+  @media print {
+    body { background: #fff; color: #000; }
+    .hero, .search-box, .actions, .store-status, .footer, .banner { display: none !important; }
+    .stat { border: 1px solid #ccc; background: #fff; color: #000; }
+    table { background: #fff; }
+    thead th { background: #eee; color: #000; }
+    tbody td { color: #000; border-color: #ddd; }
+    .prod-title a { color: #000; }
+    .print-header { display: block !important; text-align: center; margin-bottom: 16px; }
+  }
+  .print-header { display: none; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>صيّاد <span>الأسعار</span> 🎯</h1>
+  <p>ابحث عن أي منتج — نقارنلك الأسعار في مواقع التسوق المصرية ونطلعلك تقرير</p>
+  <div class="stores-line">
+    <span class="store-pill pill-jumia">🟠 جوميا</span>
+    <span class="store-pill pill-noon">🟡 نون</span>
+    <span class="store-pill pill-amazon">🟤 أمازون مصر</span>
+  </div>
+  <div class="search-box">
+    <input id="q" type="text" placeholder="اكتب اسم المنتج… مثال: سماعات ساوندكور R50i" autofocus>
+    <button id="go" onclick="doSearch()">🔍 ابحث</button>
+  </div>
+</div>
+
+<div class="container" id="results"></div>
+
+<div class="footer">
+  صيّاد الأسعار — الأسعار لحظة البحث وقد تتغير • تأكد من السعر النهائي في صفحة المتجر قبل الشراء
+</div>
+
+<script>
+const qInput = document.getElementById('q');
+const goBtn = document.getElementById('go');
+const box = document.getElementById('results');
+let lastData = null;
+let activeStore = 'all';
+let sortKey = 'price', sortAsc = true;
+
+qInput.addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
+
+const STORE_NAMES = { jumia: 'جوميا', noon: 'نون', amazon: 'أمازون' };
+
+async function doSearch() {
+  const q = qInput.value.trim();
+  if (q.length < 2) { qInput.focus(); return; }
+  goBtn.disabled = true;
+  activeStore = 'all';
+  box.innerHTML = `<div class="loader"><div class="spinner"></div><p>بنفتش في المتاجر… جوميا ونون وأمازون 🕵️</p></div>`;
+  try {
+    const res = await fetch('/api/search?q=' + encodeURIComponent(q));
+    lastData = await res.json();
+    render();
+  } catch (e) {
+    box.innerHTML = `<div class="empty"><div class="big">⚠️</div>حصل خطأ أثناء البحث — جرّب تاني</div>`;
+  }
+  goBtn.disabled = false;
+}
+
+function fmt(n) { return n == null ? '—' : Number(n).toLocaleString('en-EG') + ' ج'; }
+
+function render() {
+  const d = lastData;
+  if (!d) return;
+
+  let items = d.items.filter(i => activeStore === 'all' || i.store === activeStore);
+  items = [...items].sort((a, b) => {
+    let va = a[sortKey], vb = b[sortKey];
+    if (va == null) va = sortAsc ? Infinity : -Infinity;
+    if (vb == null) vb = sortAsc ? Infinity : -Infinity;
+    if (typeof va === 'string') return sortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
+    return sortAsc ? va - vb : vb - va;
+  });
+
+  let html = `<div class="print-header"><h2>تقرير أسعار: ${esc(d.query)}</h2><p>صيّاد الأسعار — ${new Date().toLocaleDateString('ar-EG')}</p></div>`;
+
+  // بانر الوضع
+  if (d.mode === 'demo') {
+    html += `<div class="banner banner-demo">⚠️ ${esc(d.demo_note)}</div>`;
+  } else {
+    html += `<div class="banner banner-live">✅ نتائج حية من المتاجر — استغرق البحث ${(d.summary.took_ms/1000).toFixed(1)} ثانية</div>`;
+  }
+
+  if (!d.items.length) {
+    html += `<div class="empty"><div class="big">🔍</div>مفيش نتائج لـ «${esc(d.query)}»`;
+    if (d.suggestions && d.suggestions.length) {
+      html += `<p style="margin:14px 0 10px">جرّب تدور على:</p><div class="suggestions">` +
+        d.suggestions.map(s => `<button class="sug" onclick="searchFor('${esc(s)}')">${esc(s)}</button>`).join('') + `</div>`;
+    }
+    html += `</div>`;
+    box.innerHTML = html;
+    return;
+  }
+
+  // ملخص
+  html += `<div class="summary">
+    <div class="stat best"><div class="label">🏆 أقل سعر</div><div class="value">${fmt(d.summary.best_price)}</div><div class="label">${STORE_NAMES[d.summary.best_store] || ''}</div></div>
+    <div class="stat"><div class="label">📊 متوسط السعر</div><div class="value">${fmt(d.summary.avg_price)}</div></div>
+    <div class="stat"><div class="label">📦 عدد العروض</div><div class="value">${d.summary.count}</div></div>
+    <div class="stat"><div class="label">🏪 المتاجر</div><div class="value">${new Set(d.items.map(i=>i.store)).size}</div></div>
+  </div>`;
+
+  // حالة المتاجر + فلترة
+  html += `<div class="store-status">
+    <span class="chip ${activeStore==='all'?'active':''}" onclick="filterStore('all')">الكل</span>`;
+  for (const st of ['jumia','noon','amazon']) {
+    const info = (d.stores || []).find(s => s.store === st);
+    const status = info ? info.status : 'ok';
+    const count = d.items.filter(i => i.store === st).length;
+    html += `<span class="chip ${activeStore===st?'active':''}" onclick="filterStore('${st}')" title="${info && info.message ? esc(info.message) : ''}">
+      <span class="dot dot-${status}"></span> ${STORE_NAMES[st]} (${count})</span>`;
+  }
+  html += `</div>`;
+
+  // أزرار
+  html += `<div class="actions">
+    <button class="btn" onclick="window.print()">🖨️ طباعة / حفظ التقرير PDF</button>
+    <button class="btn" onclick="copyReport()">📋 نسخ التقرير</button>
+  </div>`;
+
+  // الجدول
+  const bestPrice = d.summary.best_price;
+  html += `<table><thead><tr>
+    <th onclick="sortBy('title')">المنتج ${sortKey==='title'?(sortAsc?'▲':'▼'):''}</th>
+    <th onclick="sortBy('store')">المتجر ${sortKey==='store'?(sortAsc?'▲':'▼'):''}</th>
+    <th onclick="sortBy('price')">السعر ${sortKey==='price'?(sortAsc?'▲':'▼'):''}</th>
+    <th>الخصم</th>
+  </tr></thead><tbody>`;
+  for (const it of items) {
+    const isBest = it.price === bestPrice;
+    html += `<tr class="${isBest ? 'best-row' : ''}">
+      <td class="prod-title"><a href="${esc(it.url)}" target="_blank" rel="noopener">${esc(it.title)}</a>
+        ${isBest ? '<span class="best-tag">🏆 الأرخص</span>' : ''}</td>
+      <td><span class="badge badge-${it.store}">${STORE_NAMES[it.store] || it.store}</span></td>
+      <td><span class="price ${isBest ? 'price-best' : ''}">${fmt(it.price)}</span>
+        ${it.old_price ? `<span class="old-price">${fmt(it.old_price)}</span>` : ''}</td>
+      <td>${it.discount ? `<span class="disc">-${it.discount}%</span>` : '—'}</td>
+    </tr>`;
+  }
+  html += `</tbody></table>`;
+
+  box.innerHTML = html;
+}
+
+function filterStore(s) { activeStore = s; render(); }
+function sortBy(k) {
+  if (sortKey === k) sortAsc = !sortAsc; else { sortKey = k; sortAsc = true; }
+  render();
+}
+function searchFor(s) { qInput.value = s; doSearch(); }
+function esc(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function copyReport() {
+  if (!lastData) return;
+  const d = lastData;
+  let txt = `تقرير أسعار: ${d.query}\n${new Date().toLocaleString('ar-EG')}\n${'='.repeat(40)}\n`;
+  for (const it of d.items) {
+    txt += `${STORE_NAMES[it.store] || it.store} | ${fmt(it.price)}${it.discount ? ` (خصم ${it.discount}%)` : ''} | ${it.title}\n${it.url}\n\n`;
+  }
+  navigator.clipboard.writeText(txt).then(() => alert('✅ تم نسخ التقرير'));
+}
+</script>
+</body>
+</html>
