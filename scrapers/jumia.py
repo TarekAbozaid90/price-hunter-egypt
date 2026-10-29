@@ -1,34 +1,47 @@
 # -*- coding: utf-8 -*-
 """سكرابر جوميا مصر — يعمل بصفحات البحث HTML العادية"""
 import time
-import httpx
+
 from bs4 import BeautifulSoup
+
+import config
 from .base import HEADERS, Item, StoreResult, parse_price
+from .net import describe_error, http_get
 
 STORE = "jumia"
 STORE_NAME = "جوميا"
 
 
+def _res(status, message="", items=None, t0=None, net=None):
+    return StoreResult(
+        STORE, STORE_NAME, status, message, items or [],
+        elapsed_ms=_ms(t0),
+        via=getattr(net, "via", "direct"),
+        proxy=getattr(net, "proxy", ""),
+    )
+
+
 def search(query: str) -> StoreResult:
     t0 = time.time()
     try:
-        r = httpx.get(
+        r = http_get(
             "https://www.jumia.com.eg/catalog/",
             params={"q": query},
             headers=HEADERS,
-            timeout=8,
-            follow_redirects=True,
+            store=STORE,
         )
-    except Exception as e:
-        return StoreResult(STORE, STORE_NAME, "error", f"تعذر الاتصال: {e.__class__.__name__}",
-                           elapsed_ms=_ms(t0))
+    except Exception as e:  # noqa: BLE001
+        return _res("error", f"تعذر الاتصال: {describe_error(e)}", t0=t0, net=e)
 
-    if r.status_code == 403:
-        return StoreResult(STORE, STORE_NAME, "blocked",
-                           "الموقع حظر الطلب (حماية ضد الروبوتات) — جرّب من سيرفر داخل مصر أو استخدم بروكسي",
-                           elapsed_ms=_ms(t0))
+    if r.status_code in (403, 429):
+        return _res(
+            "blocked",
+            "الموقع حظر الطلب (حماية ضد الروبوتات) — ضيف بروكسي من إعدادات Render "
+            "عبر المتغير PROXY_URL أو من سيرفر داخل مصر",
+            t0=t0, net=r,
+        )
     if r.status_code != 200:
-        return StoreResult(STORE, STORE_NAME, "error", f"HTTP {r.status_code}", elapsed_ms=_ms(t0))
+        return _res("error", f"HTTP {r.status_code}", t0=t0, net=r)
 
     soup = BeautifulSoup(r.text, "lxml")
     items = []
@@ -56,9 +69,7 @@ def search(query: str) -> StoreResult:
             continue
 
     status = "ok" if items else "empty"
-    return StoreResult(STORE, STORE_NAME, status,
-                       "" if items else "لا توجد نتائج مطابقة",
-                       items, elapsed_ms=_ms(t0))
+    return _res(status, "" if items else "لا توجد نتائج مطابقة", items, t0, r)
 
 
 def _ms(t0):

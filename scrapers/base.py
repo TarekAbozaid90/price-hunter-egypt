@@ -44,6 +44,8 @@ class StoreResult:
     message: str = ""
     items: list = field(default_factory=list)
     elapsed_ms: int = 0
+    via: str = "direct"   # direct / proxy
+    proxy: str = ""       # البروكسي المستخدم (مقنّع) لو الاتصال عدّى من بروكسي
 
 
 def parse_price(text: str) -> Optional[float]:

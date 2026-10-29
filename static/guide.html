@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>دليل التعديل على GitHub وتشغيل البروكسي — صيّاد الأسعار</title>
+<style>
+  :root{
+    --ink:#0b1220;--body:#334155;--muted:#64748b;--line:#e2e8f0;--bg:#f5f7fb;--card:#fff;
+    --brand:#4f46e5;--brand-soft:#eef2ff;--green:#15803d;--green-soft:#ecfdf5;
+    --amber:#b45309;--amber-soft:#fffbeb;--red:#b91c1c;--red-soft:#fef2f2;--radius:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Segoe UI","Noto Kufi Arabic",Tahoma,Arial,sans-serif;background:var(--bg);
+    color:var(--body);line-height:1.85;-webkit-text-size-adjust:100%}
+  .wrap{max-width:900px;margin:0 auto;padding:0 16px}
+  header{background:linear-gradient(135deg,#0b1220,#1e2a4a);color:#fff;padding:38px 16px 30px;text-align:center}
+  header .kicker{display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);
+    padding:5px 14px;border-radius:999px;font-size:.78rem;font-weight:700;margin-bottom:12px}
+  header h1{font-size:clamp(1.4rem,4vw,2rem);line-height:1.35;margin-bottom:8px}
+  header p{color:#c7d2e5;font-size:.94rem;max-width:640px;margin:0 auto}
+  .toc{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:16px 18px;margin:22px 0;box-shadow:0 10px 30px -22px rgba(15,23,42,.4)}
+  .toc b{display:block;margin-bottom:8px;color:var(--ink)}
+  .toc a{display:block;color:var(--brand);text-decoration:none;font-size:.92rem;padding:3px 0}
+  .toc a:hover{text-decoration:underline}
+  section{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:22px;margin-bottom:18px;box-shadow:0 10px 30px -24px rgba(15,23,42,.35)}
+  h2{font-size:1.18rem;color:var(--ink);margin-bottom:6px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  h2 .num{background:var(--brand);color:#fff;width:30px;height:30px;border-radius:9px;
+    display:inline-flex;align-items:center;justify-content:center;font-size:.95rem;flex:0 0 auto}
+  h3{font-size:1rem;color:var(--ink);margin:18px 0 8px}
+  p{margin:8px 0}
+  ul,ol{margin:8px 0 8px 0;padding-inline-start:22px}
+  li{margin:5px 0}
+  code{background:#0f172a;color:#e2e8f0;padding:2px 7px;border-radius:6px;font-size:.85em;
+    font-family:Consolas,Menlo,monospace;direction:ltr;display:inline-block}
+  pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:12px;overflow-x:auto;
+    direction:ltr;text-align:left;font-size:.83rem;line-height:1.7;margin:10px 0;
+    font-family:Consolas,Menlo,monospace}
+  pre .c{color:#7dd3fc}
+  .note{border-radius:12px;padding:12px 15px;font-size:.9rem;margin:12px 0;border:1px solid}
+  .note b{display:block;margin-bottom:3px}
+  .info{background:var(--brand-soft);border-color:#c7d2fe;color:#3730a3}
+  .ok{background:var(--green-soft);border-color:#bbf7d0;color:#14532d}
+  .warn{background:var(--amber-soft);border-color:#fde68a;color:#78350f}
+  .bad{background:var(--red-soft);border-color:#fecaca;color:#7f1d1d}
+  .steps{counter-reset:s;list-style:none;padding:0}
+  .steps>li{counter-increment:s;position:relative;padding-inline-start:42px;margin:14px 0}
+  .steps>li::before{content:counter(s);position:absolute;inset-inline-start:0;top:2px;
+    width:28px;height:28px;border-radius:50%;background:var(--brand-soft);color:var(--brand);
+    border:1px solid #c7d2fe;display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:.85rem}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.88rem}
+  th,td{border:1px solid var(--line);padding:9px 11px;text-align:start;vertical-align:top}
+  th{background:#f1f5f9;color:var(--ink);font-weight:700}
+  .pill{display:inline-block;padding:2px 10px;border-radius:999px;font-size:.78rem;font-weight:700}
+  .pill.g{background:var(--green-soft);color:var(--green);border:1px solid #bbf7d0}
+  .pill.r{background:var(--red-soft);color:var(--red);border:1px solid #fecaca}
+  .pill.a{background:var(--amber-soft);color:var(--amber);border:1px solid #fde68a}
+  footer{text-align:center;padding:26px 16px 40px;color:var(--muted);font-size:.82rem}
+  footer strong{color:var(--ink)}
+  @media print{
+    body{background:#fff}
+    header{background:#fff;color:#000;border-bottom:2px solid #000}
+    header p,.kicker{color:#333}
+    section{box-shadow:none;break-inside:avoid;border-color:#bbb}
+    .toc{display:none}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker">دليل عملي — الإصدار 3.0</div>
+  <h1>إزاي تعدّل على GitHub وإزاي تشغّل البروكسي</h1>
+  <p>كل حاجة خطوة بخطوة: تعديل الملفات من المتصفح، رفع التحديثات، إضافة متجر جديد، وتشغيل البروكسي عشان السكرابينج الحي يشتغل.</p>
+</header>
+
+<div class="wrap">
+
+  <nav class="toc">
+    <b>محتويات الدليل</b>
+    <a href="#gh-edit">1) تعديل ملف موجود على GitHub من المتصفح</a>
+    <a href="#gh-upload">2) رفع ملفات جديدة (صور/ملفات) على GitHub</a>
+    <a href="#gh-git">3) التعديل من الكمبيوتر بأوامر git</a>
+    <a href="#gh-store">4) إضافة متجر جديد في 3 خطوات</a>
+    <a href="#proxy-why">5) البروكسي: ليه محتاجينه؟</a>
+    <a href="#proxy-render">6) تشغيل البروكسي على Render</a>
+    <a href="#proxy-local">7) تشغيل البروكسي محليًا (.env)</a>
+    <a href="#proxy-test">8) اختبار البروكسي وقراءة النتيجة</a>
+    <a href="#proxy-fix">9) أخطاء شائعة وحلولها</a>
+    <a href="#mobile">10) الموبايل واللغة وأدوات الذكاء الاصطناعي</a>
+  </nav>
+
+  <!-- ============ 1 ============ -->
+  <section id="gh-edit">
+    <h2><span class="num">1</span> تعديل ملف موجود على GitHub من المتصفح</h2>
+    <p>أسهل طريقة — من غير أي برامج. كل اللي محتاجه حساب GitHub ومستودع المشروع مرفوع عليه.</p>
+    <ol class="steps">
+      <li>افتح صفحة المستودع: <code>https://github.com/&lt;اسمك&gt;/price-hunter</code>.</li>
+      <li>افتح الملف اللي عايز تعدّله (مثلًا <code>static/index.html</code> أو <code>scrapers/stores.py</code>).</li>
+      <li>اضغط أيقونة القلم ✏️ (Edit this file) فوق على يمين الملف.</li>
+      <li>عدّل اللي انت عايزه. لو الملف كبير استخدم <code>Ctrl+F</code> للوصول للسطر.</li>
+      <li>انزل تحت خالص → في خانة <b>Commit changes</b> اكتب وصف قصير (مثل: <code>إضافة متجر جديد</code>).</li>
+      <li>اختار <b>Commit directly to the main branch</b> واضغط <b>Commit changes</b>.</li>
+    </ol>
+    <div class="note ok"><b>بعد الـ Commit</b>
+      Render بيراقب الفرع <code>main</code> وبيعمل نشر تلقائي (Auto-Deploy) خلال دقيقة أو دقيقتين.
+      تقدر تتابع التقدّم من تاب <b>Logs</b> في Render.</div>
+    <div class="note warn"><b>مهم</b>
+      أي تعديل في <code>app.py</code> أو <code>scrapers/</code> أو <code>static/</code> محتاج إعادة نشر
+      (بتحصل لوحدها). لو الموقع مش بيتحدّث: من Render اضغط <b>Manual Deploy → Deploy latest commit</b>.</div>
+  </section>
+
+  <!-- ============ 2 ============ -->
+  <section id="gh-upload">
+    <h2><span class="num">2</span> رفع ملفات جديدة على GitHub (صور المنتجات مثلًا)</h2>
+    <ol class="steps">
+      <li>من صفحة المستودع اضغط <b>Add file → Upload files</b>.</li>
+      <li>اسحب الصور أو الملفات وارميها في الصفحة (أو <b>choose your files</b>).</li>
+      <li>لو الملفات جوه فولدر: اكتب مسار الفولدر في خانة الاسم، مثال: <code>static/img/products/</code>.</li>
+      <li>اكتب وصف في <b>Commit changes</b> → اضغط <b>Commit changes</b>.</li>
+    </ol>
+    <div class="note info"><b>مقاسات مقترحة لصور المنتجات</b>
+      صورة مربعة 200×200 بكسل بصيغة <code>.jpg</code> أو <code>.webp</code> وحجم أقل من 40 كيلوبايت —
+      كده الصفحة تفضل سريعة على الموبايل. صور الديمو الحالية في <code>static/img/products/</code>.</div>
+  </section>
+
+  <!-- ============ 3 ============ -->
+  <section id="gh-git">
+    <h2><span class="num">3</span> التعديل من الكمبيوتر بأوامر git</h2>
+    <p>لو التعديلات كتير، أنزّل المشروع وعدّل عليه محليًا وبعدين ارفع.</p>
+<pre><span class="c"># 1) نزّل المشروع أول مرة</span>
+git clone https://github.com/&lt;اسمك&gt;/price-hunter.git
+cd price-hunter
+
+<span class="c"># 2) عدّل الملفات على جهازك (VS Code أو أي محرر)</span>
+
+<span class="c"># 3) شوف اللي اتغيّر</span>
+git status
+git diff
+
+<span class="c"># 4) سجّل التعديل وارفعه</span>
+git add -A
+git commit -m "إضافة متاجر جديدة + صور المنتجات + دعم اللغتين"
+git push origin main</pre>
+    <div class="note info"><b>نصيحة</b>
+      قبل أي <code>push</code> اعمل <code>git pull --rebase</code> لو فيه تعديلات من المتصفح،
+      عشان تتجنّب تعارض الملفات (Merge conflict).</div>
+  </section>
+
+  <!-- ============ 4 ============ -->
+  <section id="gh-store">
+    <h2><span class="num">4</span> إضافة متجر جديد في 3 خطوات</h2>
+    <p>المتاجر كلها مسجّلة في ملف واحد: <code>scrapers/stores.py</code>. إضافة متجر = سطر واحد.</p>
+    <ol class="steps">
+      <li>افتح <code>scrapers/stores.py</code> على GitHub واضغط ✏️.</li>
+      <li>ضيف السطر ده جوه قائمة <code>EXTRA_STORES</code> (غيّر القيم حسب المتجر):
+<pre>StoreProfile("mystore", "اسم المتجر بالعربي", "Store Name", "#4f8cff",
+             "magento",        <span class="c"># shopify | woocommerce | magento | generic</span>
+             "https://mystore.com/catalogsearch/result/?q={q}",
+             "https://mystore.com", "mystore.com"),</pre>
+      </li>
+      <li>اعمل Commit → Render هيعمل نشر لوحده → ابحث وشوف المتجر ظهر في الشرائح.</li>
+    </ol>
+    <h3>إزاي تختار نوع المحرك (engine)؟</h3>
+    <table>
+      <tr><th>المحرك</th><th>يستخدم إمتى</th></tr>
+      <tr><td><code>shopify</code></td><td>الموقع عليه <code>/search?q=</code> و<b>Shopify</b> في الكود المصدري</td></tr>
+      <tr><td><code>woocommerce</code></td><td>ووردبريس/وودمارت — لينكات فيها <code>/product/</code></td></tr>
+      <tr><td><code>magento</code></td><td>روابط <code>/catalogsearch/result/?q=</code></td></tr>
+      <tr><td><code>generic</code></td><td>مش متأكد؟ ده بيلقط JSON-LD و__NEXT_DATA__ وأي كروت منتجات</td></tr>
+    </table>
+    <div class="note warn"><b>لو المتجر ظهر «محجوب»</b>
+      يبقى الموقع بيرفض طلبات السيرفرات (Cloudflare / حماية بوتات) — الحل هو البروكسي في الجزء الجاي،
+      وممكن كمان تحدد بروكسي خاص للمتجر ده: <code>MYSTORE_PROXY</code>.</div>
+  </section>
+
+  <!-- ============ 5 ============ -->
+  <section id="proxy-why">
+    <h2><span class="num">5</span> البروكسي: ليه محتاجينه أصلًا؟</h2>
+    <p>جوميا ونون وأمازون و2B وبي تك ورنين… كلهم وراهم حماية (Cloudflare وغيرها) بترفض
+      الطلبات الجاية من <b>IP سيرفرات</b> زي Render. لما الموقع بتاعنا يطلب صفحة البحث منهم بيرجّع
+      <code>403 / 429</code> أو صفحة تحقق، فالنتيجة تظهر «محجوب».</p>
+    <p>الحل: نعدّي الطلبات من <b>IP سكني (Residential) أو موبايل مصري</b> — كأن الزائر إنسان عادي.
+      الكود جاهز للده 100%: بمجرد ما تحط قيمة البروكسي، كل السكرابرز بقت بتعدي منه تلقائيًا.</p>
+    <table>
+      <tr><th>نوع البروكسي</th><th>النتيجة مع المتاجر المصرية</th></tr>
+      <tr><td>داتا سنتر (Datacenter)</td><td><span class="pill r">بيتحظر غالبًا</span></td></tr>
+      <tr><td>سكني (Residential)</td><td><span class="pill g">أفضل نتيجة</span></td></tr>
+      <tr><td>موبايل (4G/5G)</td><td><span class="pill g">ممتاز</span></td></tr>
+      <tr><td>سيرفر داخل مصر (VPS)</td><td><span class="pill a">بيشتغل مع بعض المتاجر</span></td></tr>
+    </table>
+  </section>
+
+  <!-- ============ 6 ============ -->
+  <section id="proxy-render">
+    <h2><span class="num">6</span> تشغيل البروكسي على Render (خطوة بخطوة)</h2>
+    <ol class="steps">
+      <li>افتح <b>dashboard.render.com</b> → اختار الخدمة <code>price-hunter-egypt</code>.</li>
+      <li>من القائمة الجانبية: <b>Environment</b>.</li>
+      <li>اضغط <b>Add Environment Variable</b>.</li>
+      <li>Key = <code>PROXY_URL</code> — Value = رابط البروكسي بالشكل:
+<pre>http://USERNAME:PASSWORD@HOST:PORT</pre>
+        </li>
+      <li>اضغط <b>Save Changes</b> → Render هيعمل Redeploy تلقائي (استنى 1–2 دقيقة).</li>
+      <li>افتح <code>https://اسم-موقعك.onrender.com/api/proxy-info</code> للتأكد (الجزء 8).</li>
+    </ol>
+    <h3>المتغيرات المدعومة (كلها اختيارية)</h3>
+    <table>
+      <tr><th>المتغير</th><th>الوظيفة</th></tr>
+      <tr><td><code>PROXY_URL</code></td><td>بروكسي واحد لكل المتاجر (الأسهل)</td></tr>
+      <tr><td><code>PROXY_LIST</code></td><td>أكتر من بروكسي مفصولين بفاصلة — تدوير تلقائي</td></tr>
+      <tr><td><code>JUMIA_PROXY</code> / <code>NOON_PROXY</code> / <code>AMAZON_PROXY</code> / <code>BTECH_PROXY</code> / <code>VONTX_PROXY</code> …</td><td>بروكسي مخصص لمتجر معين (أو <code>off</code> لتعطيله)</td></tr>
+      <tr><td><code>PROXY_HOST</code> + <code>PROXY_PORT</code> + <code>PROXY_USERNAME</code> + <code>PROXY_PASSWORD</code></td><td>بديل لو البيانات مش في رابط واحد</td></tr>
+      <tr><td><code>PROXY_ROTATE</code></td><td><code>round</code> (افتراضي) / <code>random</code> / <code>sticky</code></td></tr>
+      <tr><td><code>PROXY_FALLBACK_DIRECT</code></td><td><code>1</code> = يجرّب اتصال مباشر لو البروكسي فشل</td></tr>
+      <tr><td><code>SCRAPER_TIMEOUT</code></td><td>مهلة الطلب بالثواني (افتراضي 8)</td></tr>
+      <tr><td><code>SCRAPER_RETRIES</code></td><td>عدد المحاولات على بروكسيات مختلفة (افتراضي 2)</td></tr>
+    </table>
+    <div class="note bad"><b>تحذير أمني</b>
+      متكتبش بيانات البروكسي في الكود ولا في GitHub أبدًا. خليها Environment Variables بس،
+      وملف <code>.env</code> مستثنى في <code>.gitignore</code>.</div>
+  </section>
+
+  <!-- ============ 7 ============ -->
+  <section id="proxy-local">
+    <h2><span class="num">7</span> تشغيل البروكسي محليًا</h2>
+<pre><span class="c"># 1) نزّل المكتبات</span>
+pip install -r requirements.txt
+
+<span class="c"># 2) انسخ قالب الإعدادات</span>
+cp .env.example .env
+
+<span class="c"># 3) افتح .env واملأ السطر ده</span>
+PROXY_URL=http://user:pass@host:port
+
+<span class="c"># 4) شغّل الموقع</span>
+python app.py
+<span class="c"># افتح http://localhost:8000</span></pre>
+    <p>الصيغ المقبولة للبروكسي:</p>
+<pre>http://user:pass@host:port
+https://user:pass@host:port
+socks5://user:pass@host:port
+host:port
+host:port:user:pass      <span class="c"># صيغة شائعة عند بعض المزودين</span></pre>
+  </section>
+
+  <!-- ============ 8 ============ -->
+  <section id="proxy-test">
+    <h2><span class="num">8</span> اختبار البروكسي وقراءة النتيجة</h2>
+    <p>افتح في المتصفح: <code>https://اسم-موقعك.onrender.com/api/proxy-info</code></p>
+    <p>هتلاقي حقل <code>verdict</code> — معناه كده:</p>
+    <table>
+      <tr><th>النتيجة</th><th>المعنى</th><th>التصرف</th></tr>
+      <tr><td><code>proxy_ok</code> <span class="pill g">شغال</span></td><td>البروكسي بيرد و IP الخروج مختلف عن IP السيرفر</td><td>مفيش حاجة — السكرابينج الحي شغال</td></tr>
+      <tr><td><code>no_proxy</code> <span class="pill a">مفيش بروكسي</span></td><td>مفيش أي متغير متظبط</td><td>ضيف <code>PROXY_URL</code></td></tr>
+      <tr><td><code>proxy_failed</code> <span class="pill r">فاشل</span></td><td>البروكسي متظبط بس مش واصل</td><td>راجع العنوان/المنفذ/اليوزر/الباسورد والاشتراك</td></tr>
+    </table>
+    <div class="note info"><b>تنبيه ذكي</b>
+      لو <code>exit_ip</code> بتاع البروكسي نفس <code>exit_ip</code> بتاع الاتصال المباشر،
+      يبقى البروكسي مش شغال فعلًا (بيعدّي من غير تحويل).</div>
+    <p>كمان تقدر تجرّب البحث مباشرة:
+      <code>https://اسم-موقعك.onrender.com/api/search?q=iphone</code> — وشوف حقل
+      <code>stores[].status</code>: <code>ok</code> يعني نجح، <code>blocked</code> يعني محتاج بروكسي.</p>
+  </section>
+
+  <!-- ============ 9 ============ -->
+  <section id="proxy-fix">
+    <h2><span class="num">9</span> أخطاء شائعة وحلولها</h2>
+    <table>
+      <tr><th>الخطأ</th><th>السبب</th><th>الحل</th></tr>
+      <tr><td><code>407</code></td><td>بيانات الدخول غلط أو ناقصة</td><td>راجع اليوزر/الباسورد، ولو فيه رموز خاصة اعمل URL-encode أو استخدم <code>PROXY_HOST</code> + <code>PROXY_PORT</code></td></tr>
+      <tr><td><code>403 / 429</code> من المتجر</td><td>البروكسي داتا سنتر أو محظور</td><td>استخدم بروكسي سكني/موبايل، أو <code>PROXY_LIST</code> للتدوير</td></tr>
+      <tr><td><code>ConnectTimeout</code></td><td>البروكسي بطيء أو مقطوع</td><td>زوّد <code>SCRAPER_TIMEOUT</code> أو غيّر البروكسي</td></tr>
+      <tr><td><code>UnsupportedProtocol</code></td><td><code>socks5</code> من غير مكتبة</td><td>موجودة أصلًا في <code>requirements.txt</code> (<code>httpx[socks]</code>) — تأكد إن النشر نزّل المكتبات</td></tr>
+      <tr><td>الموقع بطيء جدًا</td><td>متجر مش بيرد</td><td>طبيعي: بعد أول فشل بنتخطى المتجر مؤقتًا (Circuit breaker) والبحث اللي بعده يبقى أسرع</td></tr>
+    </table>
+  </section>
+
+  <!-- ============ 10 ============ -->
+  <section id="mobile">
+    <h2><span class="num">10</span> الموبايل واللغة وأدوات الذكاء الاصطناعي</h2>
+    <h3>اللغة (عربي / إنجليزي)</h3>
+    <p>زرار اللغة فوق على الشمال في الهيدر: <code>عربي</code> | <code>EN</code>.
+      التغيير بيقلب اتجاه الصفحة (<code>rtl ↔ ltr</code>) وبيتحفظ في المتصفح
+      (<code>localStorage</code>) فالمستخدم مش محتاج يختار كل مرة.</p>
+    <h3>الموبايل</h3>
+    <p>التصميم متجاوب بالكامل: الجدول بيتحوّل لكروت على الشاشات الصغيرة،
+      الصور بمقاس صغير (64 بكسل) و<code>loading="lazy"</code>، والأزرار بتكبر للمس،
+      والشرائح بتتزحلق أفقيًا. مفيش أي تمرير أفقي في الصفحة.</p>
+    <h3>أدوات الذكاء الاصطناعي</h3>
+    <p>تحت النتائج فيه كارت فيه أزرار <b>Gemini</b> و <b>ChatGPT</b> و <b>Claude</b>:
+      بتفتح الأداة بسؤال جاهز عن نفس المنتج (وبتحاول تملأ السؤال تلقائيًا حيث مدعوم)،
+      وفيه زرار «نسخ السؤال» لو حبيت تلصقه بنفسك.</p>
+  </section>
+
+  <footer>
+    صيّاد الأسعار 🎯 — <strong>© 2026 Tarek Abozaid</strong> — All Rights Reserved<br>
+    «صيّاد الأسعار» علامة تجارية ™
+  </footer>
+</div>
+</body>
+</html>

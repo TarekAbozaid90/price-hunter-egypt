@@ -4,48 +4,61 @@
 """
 import json
 import time
-import httpx
+
 from bs4 import BeautifulSoup
+
 from .base import HEADERS, Item, StoreResult, parse_price
+from .net import describe_error, http_get
 
 STORE = "noon"
 STORE_NAME = "نون"
 
 
+def _res(status, message="", items=None, t0=None, net=None):
+    return StoreResult(
+        STORE, STORE_NAME, status, message, items or [],
+        elapsed_ms=_ms(t0),
+        via=getattr(net, "via", "direct"),
+        proxy=getattr(net, "proxy", ""),
+    )
+
+
 def search(query: str) -> StoreResult:
     t0 = time.time()
     try:
-        r = httpx.get(
+        r = http_get(
             "https://www.noon.com/egypt-ar/search/",
             params={"q": query},
             headers={**HEADERS, "Accept-Language": "ar-EG,ar;q=0.9"},
-            timeout=8,
-            follow_redirects=True,
+            store=STORE,
         )
-    except Exception as e:
-        return StoreResult(STORE, STORE_NAME, "error", f"تعذر الاتصال: {e.__class__.__name__}",
-                           elapsed_ms=_ms(t0))
+    except Exception as e:  # noqa: BLE001
+        return _res("error", f"تعذر الاتصال: {describe_error(e)}", t0=t0, net=e)
 
-    if r.status_code in (401, 403):
-        return StoreResult(STORE, STORE_NAME, "blocked",
-                           "الموقع حظر الطلب (Cloudflare) — يحتاج سيرفر داخل مصر أو بروكسي سكني",
-                           elapsed_ms=_ms(t0))
+    if r.status_code in (401, 403, 429):
+        return _res(
+            "blocked",
+            "الموقع حظر الطلب (Cloudflare) — محتاج بروكسي سكني من إعدادات Render "
+            "(PROXY_URL) أو سيرفر داخل مصر",
+            t0=t0, net=r,
+        )
     if r.status_code != 200:
-        return StoreResult(STORE, STORE_NAME, "error", f"HTTP {r.status_code}", elapsed_ms=_ms(t0))
+        return _res("error", f"HTTP {r.status_code}", t0=t0, net=r)
 
     soup = BeautifulSoup(r.text, "lxml")
     script = soup.find("script", id="__NEXT_DATA__")
     if not script or not script.string:
-        return StoreResult(STORE, STORE_NAME, "error",
-                           "لم يتم العثور على بيانات الصفحة — ربما تغيّر هيكل الموقع",
-                           elapsed_ms=_ms(t0))
+        return _res(
+            "error",
+            "لم يتم العثور على بيانات الصفحة — ربما تغيّر هيكل الموقع أو إن الصفحة رجعت تحقق",
+            t0=t0, net=r,
+        )
 
     try:
         data = json.loads(script.string)
         hits = _find_hits(data)
-    except Exception as e:
-        return StoreResult(STORE, STORE_NAME, "error", f"فشل تحليل البيانات: {e}",
-                           elapsed_ms=_ms(t0))
+    except Exception as e:  # noqa: BLE001
+        return _res("error", f"فشل تحليل البيانات: {e}", t0=t0, net=r)
 
     items = []
     for h in hits:
@@ -75,9 +88,7 @@ def search(query: str) -> StoreResult:
             continue
 
     status = "ok" if items else "empty"
-    return StoreResult(STORE, STORE_NAME, status,
-                       "" if items else "لا توجد نتائج مطابقة",
-                       items, elapsed_ms=_ms(t0))
+    return _res(status, "" if items else "لا توجد نتائج مطابقة", items, t0, r)
 
 
 def _find_hits(data):

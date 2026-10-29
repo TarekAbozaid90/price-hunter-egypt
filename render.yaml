@@ -1,0 +1,31 @@
+# ============================================================
+#  Render Blueprint — نشر تلقائي لخدمة ويب مجانية
+#  الاستخدام: Render Dashboard → New + → Blueprint → اختر الريبو
+#  ملاحظة: ممكن تتجاهله وتعمل Web Service يدويًا — الاتنين شغالين.
+# ============================================================
+services:
+  - type: web
+    name: price-hunter-egypt
+    runtime: python
+    plan: free
+    region: frankfurt
+    branch: main
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.4"
+      # سيتم طلب قيمتها منك وقت الإنشاء — تقدر تسيبها فاضية وتضيفها بعدين
+      - key: PROXY_URL
+        sync: false
+      - key: PROXY_LIST
+        sync: false
+      # بروكسي مخصص لمتجر معين (اختياري) — مثال:
+      # - key: BTECH_PROXY
+      #   sync: false
+      - key: SCRAPER_TIMEOUT
+        value: "8"
+      - key: SCRAPER_RETRIES
+        value: "2"

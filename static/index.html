@@ -2,241 +2,535 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>صيّاد الأسعار 🎯 — قارن أسعار المنتجات في مصر</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f1420">
+<meta name="description" content="صيّاد الأسعار — قارن أسعار المنتجات في 11 متجر مصري: جوميا، نون، أمازون، بي تك، 2B، رنين، فونتكس، دريم 2000، اتصال ستور، دبي فون، ميامي سنترز.">
+<title>صيّاد الأسعار 🎯 | Price Hunter Egypt</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
 <style>
-  :root {
-    --bg: #0f1420;
-    --card: #1a2233;
-    --card2: #222d44;
-    --text: #eef2f8;
-    --muted: #93a0b8;
-    --accent: #4f8cff;
-    --green: #2ecc71;
-    --orange: #f68b1e;
-    --yellow: #feee00;
-    --amazon: #ff9900;
-    --red: #e74c3c;
-    --border: #2c3a56;
+  :root{
+    --bg:#0f1420; --bg2:#0b101a; --card:#1a2233; --card2:#222d44;
+    --text:#eef2f8; --muted:#93a0b8; --accent:#4f8cff; --accent2:#7aa8ff;
+    --green:#2ecc71; --orange:#f68b1e; --yellow:#feee00; --red:#e74c3c;
+    --border:#2c3a56; --radius:16px; --maxw:1160px;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  html,body{max-width:100%;overflow-x:hidden}
+  body{
+    font-family:'Segoe UI',Tahoma,system-ui,-apple-system,'Noto Kufi Arabic',Arial,sans-serif;
+    background:radial-gradient(1200px 600px at 50% -10%,#1c2a4a 0%,var(--bg) 55%) no-repeat,var(--bg);
+    color:var(--text);min-height:100vh;line-height:1.55;
+    padding-bottom:env(safe-area-inset-bottom);
   }
-  .hero {
-    text-align: center;
-    padding: 56px 20px 30px;
-    background: radial-gradient(ellipse at top, #1c2a4a 0%, var(--bg) 65%);
-  }
-  .hero h1 { font-size: 2.4rem; margin-bottom: 8px; }
-  .hero h1 span { color: var(--accent); }
-  .hero p { color: var(--muted); font-size: 1.05rem; }
-  .stores-line { margin-top: 14px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-  .store-pill {
-    padding: 5px 16px; border-radius: 999px; font-size: .85rem; font-weight: bold;
-    border: 1px solid var(--border); background: var(--card);
-  }
-  .pill-jumia { color: var(--orange); }
-  .pill-noon { color: var(--yellow); }
-  .pill-amazon { color: var(--amazon); }
+  a{color:inherit}
+  button{font-family:inherit}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:8px}
 
-  .search-box {
-    max-width: 640px; margin: 26px auto 0; display: flex; gap: 10px;
-    background: var(--card); border: 2px solid var(--border); border-radius: 16px; padding: 8px;
-    transition: border-color .2s;
+  /* =======================  الهيدر  ======================= */
+  .topbar{
+    position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
+    background:rgba(11,16,26,.82);border-bottom:1px solid var(--border);
   }
-  .search-box:focus-within { border-color: var(--accent); }
-  .search-box input {
-    flex: 1; background: transparent; border: none; outline: none;
-    color: var(--text); font-size: 1.1rem; padding: 10px 14px; font-family: inherit;
+  .topbar-inner{
+    max-width:var(--maxw);margin:0 auto;padding:10px 14px;
+    display:flex;align-items:center;gap:8px;flex-wrap:wrap;
   }
-  .search-box button {
-    background: var(--accent); color: #fff; border: none; border-radius: 12px;
-    padding: 12px 28px; font-size: 1.05rem; font-weight: bold; cursor: pointer; font-family: inherit;
-    transition: background .2s, transform .1s;
-  }
-  .search-box button:hover { background: #3d78e8; }
-  .search-box button:active { transform: scale(.97); }
-  .search-box button:disabled { opacity: .6; cursor: wait; }
+  .brand{display:flex;align-items:center;gap:8px;font-weight:800;font-size:1.05rem;text-decoration:none;white-space:nowrap}
+  .brand .dot-logo{font-size:1.15rem}
+  .brand small{color:var(--muted);font-weight:600;font-size:.72rem;display:block;line-height:1}
 
-  .container { max-width: 1080px; margin: 0 auto; padding: 24px 18px 60px; }
-
-  .banner {
-    border-radius: 12px; padding: 12px 18px; margin-bottom: 18px; font-size: .92rem;
-    border: 1px solid;
+  /* زر اللغة — فوق على الشمال */
+  .lang-switch{
+    margin-inline-start:auto;display:inline-flex;background:var(--card);
+    border:1px solid var(--border);border-radius:999px;padding:3px;gap:2px;
   }
-  .banner-demo { background: #2a2410; border-color: #6b5a1e; color: #ffd866; }
-  .banner-live { background: #0f2a1a; border-color: #1e6b3a; color: #7be3a8; }
-
-  .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 22px; }
-  .stat {
-    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
-    padding: 16px 18px; text-align: center;
+  .lang-switch button{
+    border:0;background:transparent;color:var(--muted);font-weight:800;font-size:.82rem;
+    padding:6px 12px;border-radius:999px;cursor:pointer;transition:.15s;min-width:42px;
   }
-  .stat .label { color: var(--muted); font-size: .85rem; margin-bottom: 6px; }
-  .stat .value { font-size: 1.5rem; font-weight: 800; }
-  .stat.best { border-color: var(--green); background: linear-gradient(180deg, #14291d, var(--card)); }
-  .stat.best .value { color: var(--green); }
-
-  .store-status { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
-  .chip {
-    display: inline-flex; align-items: center; gap: 7px; padding: 6px 14px; border-radius: 999px;
-    background: var(--card); border: 1px solid var(--border); font-size: .85rem; cursor: pointer;
-    transition: all .15s; user-select: none;
+  .lang-switch button:hover{color:var(--text)}
+  .lang-switch button.active{background:var(--accent);color:#fff}
+  .top-link{
+    display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:var(--muted);
+    border:1px solid var(--border);background:var(--card);border-radius:999px;
+    padding:7px 13px;font-size:.8rem;font-weight:700;white-space:nowrap;
   }
-  .chip:hover { border-color: var(--accent); }
-  .chip.active { border-color: var(--accent); background: #16233f; }
-  .dot { width: 9px; height: 9px; border-radius: 50%; }
-  .dot-ok { background: var(--green); }
-  .dot-blocked { background: var(--red); }
-  .dot-empty { background: #888; }
-  .dot-error { background: #e67e22; }
+  .top-link:hover{color:var(--text);border-color:var(--accent)}
 
-  table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 14px; overflow: hidden; }
-  thead th {
-    background: var(--card2); padding: 13px 14px; font-size: .88rem; color: var(--muted);
-    text-align: right; cursor: pointer; white-space: nowrap; user-select: none;
-  }
-  thead th:hover { color: var(--text); }
-  tbody td { padding: 13px 14px; border-top: 1px solid var(--border); font-size: .93rem; vertical-align: middle; }
-  tbody tr:hover { background: #1f2a42; }
-  tbody tr.best-row { background: rgba(46, 204, 113, .07); }
-  .prod-title { max-width: 380px; }
-  .prod-title a { color: var(--text); text-decoration: none; }
-  .prod-title a:hover { color: var(--accent); text-decoration: underline; }
-  .badge {
-    display: inline-block; padding: 3px 12px; border-radius: 999px; font-size: .8rem; font-weight: bold;
-  }
-  .badge-jumia { background: rgba(246,139,30,.15); color: var(--orange); }
-  .badge-noon { background: rgba(254,238,0,.12); color: var(--yellow); }
-  .badge-amazon { background: rgba(255,153,0,.15); color: var(--amazon); }
-  .price { font-weight: 800; font-size: 1.05rem; white-space: nowrap; }
-  .price-best { color: var(--green); }
-  .old-price { color: var(--muted); text-decoration: line-through; font-size: .82rem; display: block; }
-  .disc { background: rgba(231,76,60,.15); color: #ff8a7a; padding: 2px 10px; border-radius: 999px; font-size: .8rem; font-weight: bold; white-space: nowrap; }
-  .best-tag { color: var(--green); font-size: .78rem; font-weight: bold; }
+  /* =======================  الهيرو  ======================= */
+  .hero{text-align:center;padding:clamp(24px,5vw,52px) 16px 8px}
+  .hero h1{font-size:clamp(1.7rem,5vw,2.6rem);line-height:1.2;margin-bottom:10px;letter-spacing:-.5px}
+  .hero h1 span{color:var(--accent)}
+  .hero p{color:var(--muted);font-size:clamp(.92rem,2.4vw,1.05rem);max-width:640px;margin:0 auto}
 
-  .actions { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
-  .btn {
-    background: var(--card2); color: var(--text); border: 1px solid var(--border); border-radius: 10px;
-    padding: 9px 18px; cursor: pointer; font-family: inherit; font-size: .9rem; transition: all .15s;
+  .stores-line{
+    margin-top:16px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;
+    max-width:900px;margin-inline:auto;
   }
-  .btn:hover { border-color: var(--accent); }
-
-  .empty { text-align: center; padding: 50px 20px; color: var(--muted); }
-  .empty .big { font-size: 3rem; margin-bottom: 12px; }
-  .suggestions { margin-top: 18px; display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
-  .sug {
-    background: var(--card); border: 1px solid var(--border); color: var(--text);
-    padding: 7px 15px; border-radius: 999px; cursor: pointer; font-size: .85rem; font-family: inherit;
+  .store-pill{
+    padding:5px 13px;border-radius:999px;font-size:.78rem;font-weight:800;
+    border:1px solid var(--border);background:var(--card);color:var(--muted);
+    display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
   }
-  .sug:hover { border-color: var(--accent); color: var(--accent); }
+  .store-pill i{width:7px;height:7px;border-radius:50%;background:currentColor;display:inline-block}
 
-  .loader { text-align: center; padding: 60px 0; }
-  .spinner {
-    width: 46px; height: 46px; border: 4px solid var(--border); border-top-color: var(--accent);
-    border-radius: 50%; margin: 0 auto 16px; animation: spin .8s linear infinite;
+  .search-box{
+    max-width:680px;margin:22px auto 0;display:flex;gap:8px;
+    background:var(--card);border:2px solid var(--border);border-radius:18px;padding:8px;
+    transition:border-color .2s,box-shadow .2s;
   }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .loader p { color: var(--muted); }
-
-  .footer { text-align: center; color: var(--muted); font-size: .8rem; padding: 24px; border-top: 1px solid var(--border); }
-
-  @media print {
-    body { background: #fff; color: #000; }
-    .hero, .search-box, .actions, .store-status, .footer, .banner { display: none !important; }
-    .stat { border: 1px solid #ccc; background: #fff; color: #000; }
-    table { background: #fff; }
-    thead th { background: #eee; color: #000; }
-    tbody td { color: #000; border-color: #ddd; }
-    .prod-title a { color: #000; }
-    .print-header { display: block !important; text-align: center; margin-bottom: 16px; }
+  .search-box:focus-within{border-color:var(--accent);box-shadow:0 0 0 4px rgba(79,140,255,.12)}
+  .search-box input{
+    flex:1;min-width:0;background:transparent;border:0;outline:0;color:var(--text);
+    font-size:1rem;padding:11px 14px;
   }
-  .print-header { display: none; }
+  .search-box input::placeholder{color:#7c89a3}
+  .search-box button{
+    background:var(--accent);color:#fff;border:0;border-radius:13px;padding:12px 24px;
+    font-size:.98rem;font-weight:800;cursor:pointer;white-space:nowrap;transition:.15s;
+  }
+  .search-box button:hover{background:#3d78e8}
+  .search-box button:active{transform:scale(.97)}
+  .search-box button:disabled{opacity:.6;cursor:wait}
+
+  /* =======================  الحاوية  ======================= */
+  .container{max-width:var(--maxw);margin:0 auto;padding:22px 16px 48px}
+
+  .banner{border-radius:14px;padding:12px 16px;margin-bottom:14px;font-size:.9rem;border:1px solid;line-height:1.6}
+  .banner-demo{background:#2a2410;border-color:#6b5a1e;color:#ffd866}
+  .banner-live{background:#0f2a1a;border-color:#1e6b3a;color:#7be3a8}
+  .banner-hint{background:#101c2c;border-color:#2c4a6e;color:#9dc4ff;margin-top:8px}
+  .banner-hint code{background:#0b1522;padding:1px 6px;border-radius:6px;font-family:Consolas,Menlo,monospace;direction:ltr;display:inline-block;font-size:.85em}
+
+  /* ملخص */
+  .summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
+  .stat{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;text-align:center}
+  .stat .label{color:var(--muted);font-size:.8rem;margin-bottom:4px}
+  .stat .value{font-size:1.35rem;font-weight:800;line-height:1.2}
+  .stat.best{border-color:var(--green);background:linear-gradient(180deg,#14291d,var(--card))}
+  .stat.best .value{color:var(--green)}
+
+  /* أدوات */
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+  .btn{
+    background:var(--card2);color:var(--text);border:1px solid var(--border);border-radius:11px;
+    padding:9px 15px;cursor:pointer;font-size:.86rem;font-weight:700;transition:.15s;
+    display:inline-flex;align-items:center;gap:6px;text-decoration:none;
+  }
+  .btn:hover{border-color:var(--accent)}
+  .btn.active{border-color:var(--accent);background:#16233f;color:var(--accent2)}
+
+  /* شرائح المتاجر */
+  .store-status{
+    display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:6px;
+    scrollbar-width:thin;-webkit-overflow-scrolling:touch;
+  }
+  .chip{
+    display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:999px;
+    background:var(--card);border:1px solid var(--border);font-size:.83rem;cursor:pointer;
+    transition:.15s;user-select:none;white-space:nowrap;color:var(--text);
+  }
+  .chip:hover{border-color:var(--accent)}
+  .chip.active{border-color:var(--accent);background:#16233f}
+  .chip .cnt{color:var(--muted);font-size:.78rem}
+  .dot{width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+  .dot-ok{background:var(--green)}
+  .dot-blocked{background:var(--red)}
+  .dot-empty{background:#8a8f9c}
+  .dot-error{background:#e67e22}
+
+  /* =======================  صفوف النتائج  ======================= */
+  .rows{display:flex;flex-direction:column;gap:10px}
+  .row{
+    display:grid;grid-template-columns:64px minmax(0,1fr) 128px 78px 132px;
+    gap:12px;align-items:center;background:var(--card);border:1px solid var(--border);
+    border-radius:var(--radius);padding:12px 14px;transition:.15s;
+  }
+  .row:hover{border-color:#3a4b6d;transform:translateY(-1px)}
+  .row.best{border-color:rgba(46,204,113,.55);background:linear-gradient(90deg,rgba(46,204,113,.08),var(--card) 40%)}
+
+  .thumb{
+    width:64px;height:64px;border-radius:12px;background:#fff;overflow:hidden;
+    display:flex;align-items:center;justify-content:center;flex:0 0 auto;border:1px solid #2b3550;
+  }
+  .thumb img{width:100%;height:100%;object-fit:contain;display:block}
+  .thumb.ph{background:var(--card2);color:var(--muted);font-weight:800;font-size:1.1rem}
+
+  .info{min-width:0}
+  .p-title{
+    color:var(--text);text-decoration:none;font-weight:700;font-size:.94rem;
+    display:block;line-height:1.45;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  }
+  .p-title:hover{color:var(--accent2)}
+  .p-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:7px}
+  .badge{
+    display:inline-flex;align-items:center;gap:6px;padding:3px 11px;border-radius:999px;
+    font-size:.76rem;font-weight:800;border:1px solid color-mix(in srgb,var(--c) 45%,transparent);
+    color:var(--c);background:color-mix(in srgb,var(--c) 12%,transparent);
+  }
+  .badge i{width:7px;height:7px;border-radius:50%;background:var(--c);display:inline-block}
+  .best-tag{color:var(--green);font-size:.76rem;font-weight:800}
+  .price-col{text-align:center}
+  .price{font-weight:800;font-size:1.05rem;white-space:nowrap}
+  .price.best{color:var(--green)}
+  .old{color:var(--muted);text-decoration:line-through;font-size:.78rem;display:block}
+  .disc-col{text-align:center}
+  .disc{background:rgba(231,76,60,.16);color:#ff8a7a;padding:3px 9px;border-radius:999px;font-size:.78rem;font-weight:800;white-space:nowrap}
+  .go-col{text-align:end}
+  .btn-go{
+    display:inline-flex;align-items:center;gap:5px;text-decoration:none;font-size:.83rem;font-weight:800;
+    background:var(--accent);color:#fff;border-radius:10px;padding:9px 14px;white-space:nowrap;transition:.15s;
+  }
+  .btn-go:hover{background:#3d78e8}
+
+  /* حالة المتاجر (تفاصيل) */
+  details.status-panel{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 16px;margin-bottom:16px}
+  details.status-panel summary{cursor:pointer;font-weight:800;font-size:.9rem;color:var(--muted)}
+  details.status-panel summary:hover{color:var(--text)}
+  .status-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:12px}
+  .status-item{display:flex;gap:8px;align-items:flex-start;font-size:.82rem;color:var(--muted)}
+  .status-item b{color:var(--text);font-weight:700}
+  .status-item small{display:block;color:#7f8ca6;font-size:.75rem;margin-top:2px}
+
+  /* أدوات الذكاء الاصطناعي */
+  .ai-card{
+    margin:26px 0 10px;background:linear-gradient(135deg,#151f33,#1b2740);
+    border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;
+  }
+  .ai-card h3{font-size:.98rem;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+  .ai-card p{color:var(--muted);font-size:.83rem;margin-bottom:12px}
+  .ai-btns{display:flex;gap:8px;flex-wrap:wrap}
+  .ai-btn{
+    display:inline-flex;align-items:center;gap:7px;text-decoration:none;font-weight:800;font-size:.85rem;
+    padding:9px 15px;border-radius:11px;border:1px solid var(--border);background:var(--card);
+    color:var(--text);transition:.15s;
+  }
+  .ai-btn:hover{transform:translateY(-1px);border-color:var(--accent)}
+  .ai-btn.gemini:hover{border-color:#4285f4}
+  .ai-btn.chatgpt:hover{border-color:#10a37f}
+  .ai-btn.claude:hover{border-color:#d97757}
+
+  /* حالات */
+  .empty{text-align:center;padding:44px 16px;color:var(--muted)}
+  .empty .big{font-size:2.6rem;margin-bottom:10px}
+  .suggestions{margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+  .sug{background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 15px;border-radius:999px;cursor:pointer;font-size:.83rem;font-weight:700}
+  .sug:hover{border-color:var(--accent);color:var(--accent2)}
+  .loader{text-align:center;padding:52px 0}
+  .spinner{width:44px;height:44px;border:4px solid var(--border);border-top-color:var(--accent);border-radius:50%;margin:0 auto 14px;animation:spin .8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .loader p{color:var(--muted);font-size:.9rem}
+  .skeleton{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+  .skel{height:82px;border-radius:var(--radius);background:linear-gradient(90deg,#1a2233,#222d44,#1a2233);background-size:200% 100%;animation:sk 1.2s linear infinite}
+  @keyframes sk{to{background-position:-200% 0}}
+
+  /* الفوتر */
+  .footer{
+    border-top:1px solid var(--border);margin-top:10px;padding:22px 16px 34px;
+    text-align:center;color:var(--muted);font-size:.8rem;line-height:1.8;
+  }
+  .footer .brand-line{font-weight:800;color:var(--text);font-size:.9rem;margin-bottom:4px}
+  .footer .tm{color:#b9c6dd}
+  .footer a{color:var(--accent2);text-decoration:none}
+  .footer a:hover{text-decoration:underline}
+  .footer .sep{opacity:.4;margin:0 6px}
+
+  /* =======================  موبايل  ======================= */
+  @media (max-width:640px){
+    .top-link{display:none}
+    .topbar-inner{padding:9px 12px}
+    .lang-switch button{padding:6px 10px;min-width:38px;font-size:.78rem}
+  }
+  @media (max-width:820px){
+    .row{
+      grid-template-columns:56px minmax(0,1fr);
+      grid-template-areas:"thumb info" "price disc" "go go";
+      row-gap:10px;padding:12px;
+    }
+    .thumb{grid-area:thumb;width:56px;height:56px}
+    .info{grid-area:info}
+    .price-col{grid-area:price;text-align:start;display:flex;align-items:baseline;gap:8px}
+    .disc-col{grid-area:disc;text-align:end}
+    .go-col{grid-area:go;text-align:stretch}
+    .btn-go{width:100%;justify-content:center}
+    .p-title{font-size:.9rem;-webkit-line-clamp:3}
+    .hero{padding-top:22px}
+    .search-box{flex-direction:column;padding:10px;gap:10px}
+    .search-box button{width:100%;padding:13px}
+    .search-box input{text-align:start}
+    .brand small{display:none}
+  }
+  @media (max-width:420px){
+    .summary{grid-template-columns:repeat(2,1fr);gap:8px}
+    .stat{padding:11px 8px}
+    .stat .value{font-size:1.1rem}
+    .store-pill{font-size:.72rem;padding:4px 10px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation-duration:.001ms !important;transition-duration:.001ms !important}
+  }
+
+  /* طباعة */
+  @media print{
+    body{background:#fff;color:#000}
+    .topbar,.hero .search-box,.stores-line,.toolbar,.store-status,.footer,.banner,.ai-card,.status-panel,.go-col{display:none !important}
+    .row{background:#fff;border:1px solid #ccc;break-inside:avoid}
+    .p-title,.price{color:#000}
+    .print-header{display:block !important;text-align:center;margin-bottom:14px}
+  }
+  .print-header{display:none}
 </style>
 </head>
 <body>
 
-<div class="hero">
-  <h1>صيّاد <span>الأسعار</span> 🎯</h1>
-  <p>ابحث عن أي منتج — نقارنلك الأسعار في مواقع التسوق المصرية ونطلعلك تقرير</p>
-  <div class="stores-line">
-    <span class="store-pill pill-jumia">🟠 جوميا</span>
-    <span class="store-pill pill-noon">🟡 نون</span>
-    <span class="store-pill pill-amazon">🟤 أمازون مصر</span>
+<!-- =====================  الهيدر  ===================== -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="/">
+      <span class="dot-logo">🎯</span>
+      <span>
+        <span data-i18n="brand">صيّاد الأسعار</span>
+        <small data-i18n="brandSub">Price Hunter Egypt</small>
+      </span>
+    </a>
+    <a class="top-link" href="/docs" target="_blank" rel="noopener">🔌 API</a>
+    <a class="top-link" href="/api/proxy-info" target="_blank" rel="noopener" data-i18n="proxyBtn">🌐 البروكسي</a>
+    <!-- زر تغيير اللغة — فوق على الشمال -->
+    <div class="lang-switch" role="group" aria-label="Language / اللغة">
+      <button type="button" data-lang="ar" class="active" aria-pressed="true">عربي</button>
+      <button type="button" data-lang="en" aria-pressed="false">EN</button>
+    </div>
   </div>
-  <div class="search-box">
-    <input id="q" type="text" placeholder="اكتب اسم المنتج… مثال: سماعات ساوندكور R50i" autofocus>
-    <button id="go" onclick="doSearch()">🔍 ابحث</button>
+</header>
+
+<!-- =====================  الهيرو  ===================== -->
+<section class="hero">
+  <h1><span data-i18n="heroTitleA">صيّاد</span> <span data-i18n="heroTitleB" style="color:var(--accent)">الأسعار</span> 🎯</h1>
+  <p data-i18n="heroSub">ابحث عن أي منتج — نقارنلك الأسعار في 11 متجر مصري ونطلعلك تقرير مرتب بأرخص عرض</p>
+  <div class="stores-line" id="storePills"></div>
+
+  <form class="search-box" id="searchForm" role="search" onsubmit="event.preventDefault();doSearch()">
+    <input id="q" type="text" autocomplete="off" enterkeyhint="search"
+           data-i18n-ph="searchPh" placeholder="اكتب اسم المنتج… مثال: سماعات ساوندكور R50i" aria-label="search">
+    <button id="go" type="submit" data-i18n="searchBtn">🔍 ابحث</button>
+  </form>
+</section>
+
+<!-- =====================  النتائج  ===================== -->
+<main class="container" id="results"></main>
+
+<!-- =====================  الفوتر  ===================== -->
+<footer class="footer">
+  <div class="brand-line">🎯 <span data-i18n="brand">صيّاد الأسعار</span> <span class="tm">™</span> — Price Hunter Egypt</div>
+  <div data-i18n="footerNote">الأسعار لحظة البحث وقد تتغير • تأكد من السعر النهائي في صفحة المتجر قبل الشراء</div>
+  <div style="margin-top:10px">
+    <a href="/docs" target="_blank" rel="noopener">API Docs</a>
+    <span class="sep">•</span>
+    <a href="/api/health" target="_blank" rel="noopener">Health</a>
+    <span class="sep">•</span>
+    <a href="/api/proxy-info" target="_blank" rel="noopener" data-i18n="proxyBtn">🌐 البروكسي</a>
+    <span class="sep">•</span>
+    <a href="/static/guide.html" target="_blank" rel="noopener" data-i18n="guideLink">📘 دليل GitHub والبروكسي</a>
   </div>
-</div>
-
-<div class="container" id="results"></div>
-
-<div class="footer">
-  صيّاد الأسعار — الأسعار لحظة البحث وقد تتغير • تأكد من السعر النهائي في صفحة المتجر قبل الشراء
-</div>
+  <div style="margin-top:12px" class="tm">
+    <span data-i18n="trademark">«صيّاد الأسعار» علامة تجارية ™ — جميع الحقوق محفوظة</span><br>
+    <strong>© <span id="year">2026</span> Tarek Abozaid</strong> — <span data-i18n="rights">All Rights Reserved</span>
+  </div>
+</footer>
 
 <script>
-const qInput = document.getElementById('q');
-const goBtn = document.getElementById('go');
-const box = document.getElementById('results');
+/* =====================================================================
+   1) قاموس الترجمة
+   ===================================================================== */
+const I18N = {
+  ar: {
+    brand: "صيّاد الأسعار", brandSub: "Price Hunter Egypt",
+    heroTitleA: "صيّاد", heroTitleB: "الأسعار",
+    heroSub: "ابحث عن أي منتج — نقارنلك الأسعار في 11 متجر مصري ونطلعلك تقرير مرتب بأرخص عرض",
+    searchPh: "اكتب اسم المنتج… مثال: سماعات ساوندكور R50i",
+    searchBtn: "🔍 ابحث", searching: "بنفتش في المتاجر… 11 متجر 🕵️",
+    proxyBtn: "🌐 البروكسي",
+    all: "الكل", sortCheap: "الأرخص أولاً", sortDisc: "أعلى خصم", sortName: "أبجدي",
+    bestPrice: "🏆 أقل سعر", avgPrice: "📊 متوسط السعر", offers: "📦 عدد العروض", storesCount: "🏪 متاجر فيها نتائج",
+    bestTag: "🏆 الأرخص", visit: "زيارة المتجر", oldPrice: "بدل",
+    print: "🖨️ طباعة / PDF", copy: "📋 نسخ التقرير", copied: "✅ تم نسخ التقرير",
+    liveBanner: (s, n) => `✅ نتائج حية من ${n} متجر — استغرق البحث ${s} ثانية`,
+    demoBanner: (n) => `⚠️ ${n}`,
+    demoBannerEn: "The stores refused this server's connection — showing demo data from our October 2026 price survey.",
+    hintProxy: "💡 عشان تشغّل السكرابينج الحي: ضيف المتغير <code>PROXY_URL</code> في إعدادات Render → Environment، وبعد الحفظ اختبره من <code>/api/proxy-info</code>.",
+    noResults: (q) => `مفيش نتائج لـ «${q}»`,
+    trySearch: "جرّب تدور على:", error: "حصل خطأ أثناء البحث — جرّب تاني",
+    storeStatus: "حالة المتاجر (اضغط للتفاصيل)", statusOk: "نتائج", statusBlocked: "محجوب",
+    statusEmpty: "لا نتائج", statusError: "خطأ", proxyOn: "بروكسي مفعّل", proxyOff: "بروكسي غير مفعّل",
+    aiTitle: "🤖 اسأل أدوات الذكاء الاصطناعي", aiHint: "افتح نفس السؤال في Gemini أو ChatGPT أو Claude لمقارنة الرأي مع أرقامنا",
+    aiCopy: "📋 نسخ السؤال",
+    footerNote: "الأسعار لحظة البحث وقد تتغير • تأكد من السعر النهائي في صفحة المتجر قبل الشراء",
+    trademark: "«صيّاد الأسعار» علامة تجارية ™ — جميع الحقوق محفوظة", rights: "All Rights Reserved",
+    guideLink: "📘 دليل GitHub والبروكسي",
+    reportTitle: "تقرير أسعار", currency: "ج.م",
+  },
+  en: {
+    brand: "Price Hunter", brandSub: "Egypt price comparison",
+    heroTitleA: "Price", heroTitleB: "Hunter",
+    heroSub: "Search any product — we compare prices across 11 Egyptian stores and build you a sorted report",
+    searchPh: "Type a product name… e.g. Soundcore R50i",
+    searchBtn: "🔍 Search", searching: "Searching the stores… 11 stores 🕵️",
+    proxyBtn: "🌐 Proxy",
+    all: "All", sortCheap: "Cheapest", sortDisc: "Biggest discount", sortName: "A → Z",
+    bestPrice: "🏆 Best price", avgPrice: "📊 Average", offers: "📦 Offers", storesCount: "🏪 Stores with hits",
+    bestTag: "🏆 Cheapest", visit: "Visit store", oldPrice: "was",
+    print: "🖨️ Print / PDF", copy: "📋 Copy report", copied: "✅ Report copied",
+    liveBanner: (s, n) => `✅ Live results from ${n} stores — search took ${s}s`,
+    demoBanner: () => "The stores refused this server's connection — showing demo data from our October 2026 price survey.",
+    demoBannerEn: "The stores refused this server's connection — showing demo data from our October 2026 price survey.",
+    hintProxy: "💡 To enable live scraping add <code>PROXY_URL</code> in Render → Environment, then verify at <code>/api/proxy-info</code>.",
+    noResults: (q) => `No results for “${q}”`,
+    trySearch: "Try one of these:", error: "Something went wrong — please try again",
+    storeStatus: "Store status (tap for details)", statusOk: "results", statusBlocked: "blocked",
+    statusEmpty: "no results", statusError: "error", proxyOn: "proxy on", proxyOff: "no proxy",
+    aiTitle: "🤖 Ask the AI tools", aiHint: "Open the same question in Gemini, ChatGPT or Claude and compare with our numbers",
+    aiCopy: "📋 Copy question",
+    footerNote: "Prices are captured at search time and may change • always confirm the final price on the store page",
+    trademark: "“Price Hunter” is a trademark ™ — all rights reserved", rights: "All Rights Reserved",
+    guideLink: "📘 GitHub & Proxy guide",
+    reportTitle: "Price report", currency: "EGP",
+  }
+};
+
+/* =====================================================================
+   2) المتاجر (fallback لو الـ API مش متاح)
+   ===================================================================== */
+const FALLBACK_STORES = [
+  {key:"jumia",     ar:"جوميا",        en:"Jumia",        color:"#f68b1e"},
+  {key:"noon",      ar:"نون",          en:"Noon",         color:"#feee00"},
+  {key:"amazon",    ar:"أمازون مصر",   en:"Amazon Egypt", color:"#ff9900"},
+  {key:"vontx",     ar:"فونتكس",       en:"Vontx",        color:"#12b8a6"},
+  {key:"dream2000", ar:"دريم 2000",    en:"Dream 2000",   color:"#e4002b"},
+  {key:"2b",        ar:"2B",           en:"2B",           color:"#f7a600"},
+  {key:"etisal",    ar:"اتصال ستور",   en:"Etisal Store", color:"#c8102e"},
+  {key:"dubaiphone",ar:"دبي فون",      en:"Dubai Phone",  color:"#009fe3"},
+  {key:"btech",     ar:"بي تك",        en:"B.TECH",       color:"#e30613"},
+  {key:"miami",     ar:"ميامي سنترز",  en:"Miami Centers",color:"#f7941d"},
+  {key:"raneen",    ar:"رنين",         en:"Raneen",       color:"#8e44ad"}
+];
+let STORES = FALLBACK_STORES.slice();
+const storeByKey = k => STORES.find(s => s.key === k) || {key:k, ar:k, en:k, color:"#4f8cff"};
+const storeName  = k => { const s = storeByKey(k); return lang === "ar" ? s.ar : s.en; };
+
+/* =====================================================================
+   3) الحالة العامة
+   ===================================================================== */
+let lang = localStorage.getItem("ph_lang") || "ar";
 let lastData = null;
-let activeStore = 'all';
-let sortKey = 'price', sortAsc = true;
+let activeStore = "all";
+let sortKey = "price";
+const $ = s => document.querySelector(s);
+const qInput = $("#q"), goBtn = $("#go"), box = $("#results");
 
-qInput.addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
+/* =====================================================================
+   4) اللغة
+   ===================================================================== */
+function t(key, ...args){
+  const v = I18N[lang][key] ?? I18N.ar[key] ?? key;
+  return typeof v === "function" ? v(...args) : v;
+}
 
-const STORE_NAMES = { jumia: 'جوميا', noon: 'نون', amazon: 'أمازون' };
+function applyLang(next){
+  lang = next;
+  localStorage.setItem("ph_lang", lang);
+  const html = document.documentElement;
+  html.lang = lang;
+  html.dir = lang === "ar" ? "rtl" : "ltr";
 
-async function doSearch() {
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const v = I18N[lang][el.dataset.i18n];
+    if (typeof v === "string") el.textContent = v;
+  });
+  document.querySelectorAll("[data-i18n-ph]").forEach(el => {
+    const v = I18N[lang][el.dataset.i18nPh];
+    if (typeof v === "string") el.placeholder = v;
+  });
+  document.querySelectorAll(".lang-switch button").forEach(b => {
+    const on = b.dataset.lang === lang;
+    b.classList.toggle("active", on);
+    b.setAttribute("aria-pressed", on ? "true" : "false");
+  });
+  document.title = lang === "ar" ? "صيّاد الأسعار 🎯 | Price Hunter Egypt" : "Price Hunter 🎯 | Compare prices in Egypt";
+  renderPills();
+  if (lastData) render();
+}
+
+document.querySelectorAll(".lang-switch button").forEach(b =>
+  b.addEventListener("click", () => applyLang(b.dataset.lang)));
+
+/* =====================================================================
+   5) شرائح المتاجر في الهيرو
+   ===================================================================== */
+function renderPills(){
+  $("#storePills").innerHTML = STORES.map(s =>
+    `<span class="store-pill" style="color:${s.color}"><i></i>${esc(lang === "ar" ? s.ar : s.en)}</span>`
+  ).join("");
+}
+
+/* =====================================================================
+   6) البحث
+   ===================================================================== */
+qInput.addEventListener("keydown", e => { if (e.key === "Enter"){ e.preventDefault(); doSearch(); } });
+
+async function doSearch(){
   const q = qInput.value.trim();
-  if (q.length < 2) { qInput.focus(); return; }
+  if (q.length < 2){ qInput.focus(); return; }
   goBtn.disabled = true;
-  activeStore = 'all';
-  box.innerHTML = `<div class="loader"><div class="spinner"></div><p>بنفتش في المتاجر… جوميا ونون وأمازون 🕵️</p></div>`;
-  try {
-    const res = await fetch('/api/search?q=' + encodeURIComponent(q));
+  activeStore = "all";
+  box.innerHTML = `<div class="loader"><div class="spinner"></div><p>${esc(t("searching"))}</p></div>
+    <div class="skeleton">${'<div class="skel"></div>'.repeat(4)}</div>`;
+  try{
+    const res = await fetch("/api/search?q=" + encodeURIComponent(q));
     lastData = await res.json();
     render();
-  } catch (e) {
-    box.innerHTML = `<div class="empty"><div class="big">⚠️</div>حصل خطأ أثناء البحث — جرّب تاني</div>`;
+  }catch(e){
+    box.innerHTML = `<div class="empty"><div class="big">⚠️</div>${esc(t("error"))}</div>`;
   }
   goBtn.disabled = false;
 }
 
-function fmt(n) { return n == null ? '—' : Number(n).toLocaleString('en-EG') + ' ج'; }
+const fmt = n => n == null ? "—" : Number(n).toLocaleString(lang === "ar" ? "en-EG" : "en-US") + " " + t("currency");
 
-function render() {
+/* =====================================================================
+   7) رسم النتائج
+   ===================================================================== */
+function render(){
   const d = lastData;
   if (!d) return;
 
-  let items = d.items.filter(i => activeStore === 'all' || i.store === activeStore);
+  let items = d.items.filter(i => activeStore === "all" || i.store === activeStore);
   items = [...items].sort((a, b) => {
-    let va = a[sortKey], vb = b[sortKey];
-    if (va == null) va = sortAsc ? Infinity : -Infinity;
-    if (vb == null) vb = sortAsc ? Infinity : -Infinity;
-    if (typeof va === 'string') return sortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
-    return sortAsc ? va - vb : vb - va;
+    if (sortKey === "discount") return (b.discount || 0) - (a.discount || 0);
+    if (sortKey === "title")    return String(a.title).localeCompare(String(b.title), lang);
+    return (a.price ?? Infinity) - (b.price ?? Infinity);
   });
 
-  let html = `<div class="print-header"><h2>تقرير أسعار: ${esc(d.query)}</h2><p>صيّاد الأسعار — ${new Date().toLocaleDateString('ar-EG')}</p></div>`;
+  let html = `<div class="print-header"><h2>${esc(t("reportTitle"))}: ${esc(d.query)}</h2>
+    <p>Price Hunter — ${new Date().toLocaleDateString(lang === "ar" ? "ar-EG" : "en-GB")}</p></div>`;
 
   // بانر الوضع
-  if (d.mode === 'demo') {
-    html += `<div class="banner banner-demo">⚠️ ${esc(d.demo_note)}</div>`;
-  } else {
-    html += `<div class="banner banner-live">✅ نتائج حية من المتاجر — استغرق البحث ${(d.summary.took_ms/1000).toFixed(1)} ثانية</div>`;
+  if (d.mode === "demo"){
+    const note = lang === "ar" ? (d.demo_note || t("demoBannerEn")) : t("demoBannerEn");
+    html += `<div class="banner banner-demo">⚠️ ${esc(note)}</div>`;
+    if (d.proxy && !d.proxy.enabled){
+      html += `<div class="banner banner-hint">${t("hintProxy")}</div>`;
+    }
+  }else{
+    html += `<div class="banner banner-live">${esc(t("liveBanner", (d.summary.took_ms/1000).toFixed(1), d.summary.stores_count))}</div>`;
   }
 
-  if (!d.items.length) {
-    html += `<div class="empty"><div class="big">🔍</div>مفيش نتائج لـ «${esc(d.query)}»`;
-    if (d.suggestions && d.suggestions.length) {
-      html += `<p style="margin:14px 0 10px">جرّب تدور على:</p><div class="suggestions">` +
-        d.suggestions.map(s => `<button class="sug" onclick="searchFor('${esc(s)}')">${esc(s)}</button>`).join('') + `</div>`;
+  if (!d.items.length){
+    html += `<div class="empty"><div class="big">🔍</div>${esc(t("noResults", d.query))}`;
+    if (d.suggestions && d.suggestions.length){
+      html += `<p style="margin:14px 0 10px">${esc(t("trySearch"))}</p><div class="suggestions">` +
+        d.suggestions.map(s => `<button class="sug" onclick="searchFor('${esc(s)}')">${esc(s)}</button>`).join("") + `</div>`;
     }
     html += `</div>`;
     box.innerHTML = html;
@@ -244,72 +538,164 @@ function render() {
   }
 
   // ملخص
+  const bestStore = d.summary.best_store ? storeName(d.summary.best_store) : "";
   html += `<div class="summary">
-    <div class="stat best"><div class="label">🏆 أقل سعر</div><div class="value">${fmt(d.summary.best_price)}</div><div class="label">${STORE_NAMES[d.summary.best_store] || ''}</div></div>
-    <div class="stat"><div class="label">📊 متوسط السعر</div><div class="value">${fmt(d.summary.avg_price)}</div></div>
-    <div class="stat"><div class="label">📦 عدد العروض</div><div class="value">${d.summary.count}</div></div>
-    <div class="stat"><div class="label">🏪 المتاجر</div><div class="value">${new Set(d.items.map(i=>i.store)).size}</div></div>
+    <div class="stat best"><div class="label">${esc(t("bestPrice"))}</div><div class="value">${fmt(d.summary.best_price)}</div><div class="label">${esc(bestStore)}</div></div>
+    <div class="stat"><div class="label">${esc(t("avgPrice"))}</div><div class="value">${fmt(d.summary.avg_price)}</div></div>
+    <div class="stat"><div class="label">${esc(t("offers"))}</div><div class="value">${d.summary.count}</div></div>
+    <div class="stat"><div class="label">${esc(t("storesCount"))}</div><div class="value">${d.summary.stores_count}</div></div>
   </div>`;
 
-  // حالة المتاجر + فلترة
+  // شرائح المتاجر + الفلترة
   html += `<div class="store-status">
-    <span class="chip ${activeStore==='all'?'active':''}" onclick="filterStore('all')">الكل</span>`;
-  for (const st of ['jumia','noon','amazon']) {
-    const info = (d.stores || []).find(s => s.store === st);
-    const status = info ? info.status : 'ok';
-    const count = d.items.filter(i => i.store === st).length;
-    html += `<span class="chip ${activeStore===st?'active':''}" onclick="filterStore('${st}')" title="${info && info.message ? esc(info.message) : ''}">
-      <span class="dot dot-${status}"></span> ${STORE_NAMES[st]} (${count})</span>`;
+    <span class="chip ${activeStore==='all'?'active':''}" onclick="filterStore('all')">${esc(t("all"))} <span class="cnt">(${d.items.length})</span></span>`;
+  for (const s of STORES){
+    const info = (d.stores || []).find(x => x.store === s.key);
+    const count = d.items.filter(i => i.store === s.key).length;
+    if (!info && !count) continue;
+    const status = info ? info.status : "ok";
+    const title = info && info.message ? ` title="${esc(info.message)}"` : "";
+    html += `<span class="chip ${activeStore===s.key?'active':''}" onclick="filterStore('${s.key}')"${title}>
+      <span class="dot dot-${status}"></span> ${esc(lang === "ar" ? s.ar : s.en)} <span class="cnt">(${count})</span></span>`;
+  }
+  const px = d.proxy || {};
+  html += `<span class="chip" title="${esc(px.masked || '')}">🌐 ${esc(px.enabled ? t("proxyOn") : t("proxyOff"))}</span>`;
+  html += `</div>`;
+
+  // أدوات الترتيب والطباعة
+  html += `<div class="toolbar">
+    <button class="btn ${sortKey==='price'?'active':''}" onclick="sortBy('price')">💸 ${esc(t("sortCheap"))}</button>
+    <button class="btn ${sortKey==='discount'?'active':''}" onclick="sortBy('discount')">🔥 ${esc(t("sortDisc"))}</button>
+    <button class="btn ${sortKey==='title'?'active':''}" onclick="sortBy('title')">🔤 ${esc(t("sortName"))}</button>
+    <button class="btn" onclick="window.print()">${esc(t("print"))}</button>
+    <button class="btn" onclick="copyReport()">${esc(t("copy"))}</button>
+  </div>`;
+
+  // الصفوف
+  const bestPrice = d.summary.best_price;
+  html += `<div class="rows">`;
+  for (const it of items){
+    const s = storeByKey(it.store);
+    const isBest = it.price === bestPrice;
+    const img = it.image
+      ? `<img src="${esc(it.image)}" alt="${esc(it.title)}" width="64" height="64" loading="lazy" decoding="async"
+              referrerpolicy="no-referrer" onerror="imgFallback(this,'${esc(it.store)}')">`
+      : `<span>${esc((s.ar || "?").slice(0,2))}</span>`;
+    html += `<article class="row ${isBest?'best':''}">
+      <div class="thumb ${it.image?'':'ph'}">${img}</div>
+      <div class="info">
+        <a class="p-title" href="${esc(it.url || s.site || '#')}" target="_blank" rel="noopener noreferrer">${esc(it.title)}</a>
+        <div class="p-meta">
+          <span class="badge" style="--c:${s.color}"><i></i>${esc(lang === "ar" ? s.ar : s.en)}</span>
+          ${isBest ? `<span class="best-tag">${esc(t("bestTag"))}</span>` : ""}
+        </div>
+      </div>
+      <div class="price-col">
+        <span class="price ${isBest?'best':''}">${fmt(it.price)}</span>
+        ${it.old_price ? `<span class="old">${fmt(it.old_price)}</span>` : ""}
+      </div>
+      <div class="disc-col">${it.discount ? `<span class="disc">-${it.discount}%</span>` : "—"}</div>
+      <div class="go-col">
+        <a class="btn-go" href="${esc(it.url || s.site || '#')}" target="_blank" rel="noopener noreferrer">${esc(t("visit"))} ↗</a>
+      </div>
+    </article>`;
   }
   html += `</div>`;
 
-  // أزرار
-  html += `<div class="actions">
-    <button class="btn" onclick="window.print()">🖨️ طباعة / حفظ التقرير PDF</button>
-    <button class="btn" onclick="copyReport()">📋 نسخ التقرير</button>
-  </div>`;
-
-  // الجدول
-  const bestPrice = d.summary.best_price;
-  html += `<table><thead><tr>
-    <th onclick="sortBy('title')">المنتج ${sortKey==='title'?(sortAsc?'▲':'▼'):''}</th>
-    <th onclick="sortBy('store')">المتجر ${sortKey==='store'?(sortAsc?'▲':'▼'):''}</th>
-    <th onclick="sortBy('price')">السعر ${sortKey==='price'?(sortAsc?'▲':'▼'):''}</th>
-    <th>الخصم</th>
-  </tr></thead><tbody>`;
-  for (const it of items) {
-    const isBest = it.price === bestPrice;
-    html += `<tr class="${isBest ? 'best-row' : ''}">
-      <td class="prod-title"><a href="${esc(it.url)}" target="_blank" rel="noopener">${esc(it.title)}</a>
-        ${isBest ? '<span class="best-tag">🏆 الأرخص</span>' : ''}</td>
-      <td><span class="badge badge-${it.store}">${STORE_NAMES[it.store] || it.store}</span></td>
-      <td><span class="price ${isBest ? 'price-best' : ''}">${fmt(it.price)}</span>
-        ${it.old_price ? `<span class="old-price">${fmt(it.old_price)}</span>` : ''}</td>
-      <td>${it.discount ? `<span class="disc">-${it.discount}%</span>` : '—'}</td>
-    </tr>`;
+  // تفاصيل حالة المتاجر
+  html += `<details class="status-panel"><summary>${esc(t("storeStatus"))}</summary><div class="status-grid">`;
+  for (const st of (d.stores || [])){
+    const s = storeByKey(st.store);
+    const label = st.status === "ok" ? `${t("statusOk")} (${st.count})`
+                : st.status === "blocked" ? t("statusBlocked")
+                : st.status === "empty" ? t("statusEmpty") : t("statusError");
+    html += `<div class="status-item">
+      <span class="dot dot-${st.status}" style="margin-top:6px"></span>
+      <div><b>${esc(lang === "ar" ? s.ar : s.en)}</b> — ${esc(label)}
+      <small>${esc(st.message || (st.elapsed_ms ? st.elapsed_ms + " ms" : ""))}</small></div>
+    </div>`;
   }
-  html += `</tbody></table>`;
+  html += `</div></details>`;
+
+  // أدوات الذكاء الاصطناعي
+  html += aiBlock(d.query);
 
   box.innerHTML = html;
 }
 
-function filterStore(s) { activeStore = s; render(); }
-function sortBy(k) {
-  if (sortKey === k) sortAsc = !sortAsc; else { sortKey = k; sortAsc = true; }
-  render();
+/* =====================================================================
+   8) أدوات الذكاء الاصطناعي
+   ===================================================================== */
+function aiPrompt(q){
+  return lang === "ar"
+    ? `قارن لي أسعار «${q}» في المتاجر المصرية (جوميا، نون، أمازون، بي تك، 2B، رنين…) وقولي إيه أفضل عرض وأفضل وقت للشراء.`
+    : `Compare prices for "${q}" across Egyptian stores (Jumia, Noon, Amazon, B.TECH, 2B, Raneen…) and tell me the best deal and the best time to buy.`;
 }
-function searchFor(s) { qInput.value = s; doSearch(); }
-function esc(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
-function copyReport() {
+function aiBlock(q){
+  const p = encodeURIComponent(aiPrompt(q));
+  return `<section class="ai-card">
+    <h3>${esc(t("aiTitle"))}</h3>
+    <p>${esc(t("aiHint"))}</p>
+    <div class="ai-btns">
+      <a class="ai-btn gemini" href="https://gemini.google.com/app" target="_blank" rel="noopener">✨ Gemini</a>
+      <a class="ai-btn chatgpt" href="https://chatgpt.com/?q=${p}" target="_blank" rel="noopener">💬 ChatGPT</a>
+      <a class="ai-btn claude" href="https://claude.ai/new?q=${p}" target="_blank" rel="noopener">🧠 Claude</a>
+      <button class="ai-btn" onclick="copyAiPrompt('${esc(q)}')">${esc(t("aiCopy"))}</button>
+    </div>
+  </section>`;
+}
+
+function copyAiPrompt(q){
+  navigator.clipboard?.writeText(aiPrompt(q)).then(
+    () => alert(lang === "ar" ? "✅ تم نسخ السؤال" : "✅ Question copied"),
+    () => {}
+  );
+}
+
+/* =====================================================================
+   9) أدوات مساعدة
+   ===================================================================== */
+function imgFallback(img, storeKey){
+  // 1) جرّب بروكسي الصور بتاع السيرفر  2) لو فشل: حرف المتجر
+  if (!img.dataset.retried){
+    img.dataset.retried = "1";
+    img.src = "/api/img?u=" + encodeURIComponent(img.src);
+    return;
+  }
+  const s = storeByKey(storeKey);
+  img.parentElement.classList.add("ph");
+  img.parentElement.textContent = (s.ar || "?").slice(0, 2);
+}
+
+function filterStore(k){ activeStore = k; render(); window.scrollTo({top: 0, behavior: "smooth"}); }
+function sortBy(k){ sortKey = k; render(); }
+function searchFor(s){ qInput.value = s; doSearch(); }
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function copyReport(){
   if (!lastData) return;
   const d = lastData;
-  let txt = `تقرير أسعار: ${d.query}\n${new Date().toLocaleString('ar-EG')}\n${'='.repeat(40)}\n`;
-  for (const it of d.items) {
-    txt += `${STORE_NAMES[it.store] || it.store} | ${fmt(it.price)}${it.discount ? ` (خصم ${it.discount}%)` : ''} | ${it.title}\n${it.url}\n\n`;
+  let txt = `${t("reportTitle")}: ${d.query}\n${new Date().toLocaleString(lang === "ar" ? "ar-EG" : "en-GB")}\n${"=".repeat(44)}\n`;
+  for (const it of d.items){
+    txt += `${storeName(it.store)} | ${fmt(it.price)}${it.discount ? ` (-${it.discount}%)` : ""} | ${it.title}\n${it.url}\n\n`;
   }
-  navigator.clipboard.writeText(txt).then(() => alert('✅ تم نسخ التقرير'));
+  navigator.clipboard?.writeText(txt).then(() => alert(t("copied")), () => {});
 }
+
+/* =====================================================================
+   10) الإقلاع
+   ===================================================================== */
+$("#year").textContent = new Date().getFullYear();
+applyLang(lang);
+
+fetch("/api/stores").then(r => r.json()).then(d => {
+  if (d && Array.isArray(d.stores) && d.stores.length){
+    STORES = d.stores.map(s => ({key:s.key, ar:s.ar, en:s.en, color:s.color, site:s.site}));
+    renderPills();
+    if (lastData) render();
+  }
+}).catch(() => {});
 </script>
 </body>
 </html>
